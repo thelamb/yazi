@@ -1,12 +1,13 @@
 use ratatui::layout::Rect;
 use yazi_config::popup::{Origin, Position};
-use yazi_core::{completion::Completion, help::Help, input::Input, manager::Manager, notify::Notify, select::Select, tasks::Tasks, which::Which};
+use yazi_core::{completion::Completion, confirm::Confirm, help::Help, input::Input, manager::Manager, notify::Notify, select::Select, tasks::Tasks, which::Which};
 
 pub struct Ctx {
 	pub manager:    Manager,
 	pub tasks:      Tasks,
 	pub select:     Select,
 	pub input:      Input,
+	pub confirm:    Confirm,
 	pub help:       Help,
 	pub completion: Completion,
 	pub which:      Which,
@@ -20,6 +21,7 @@ impl Ctx {
 			tasks:      Tasks::serve(),
 			select:     Default::default(),
 			input:      Default::default(),
+			confirm:    Default::default(),
 			help:       Default::default(),
 			completion: Default::default(),
 			which:      Default::default(),

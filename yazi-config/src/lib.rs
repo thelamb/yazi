@@ -38,6 +38,7 @@ pub static PREVIEW: RoCell<preview::Preview> = RoCell::new();
 pub static TASKS: RoCell<tasks::Tasks> = RoCell::new();
 pub static THEME: RoCell<theme::Theme> = RoCell::new();
 pub static INPUT: RoCell<popup::Input> = RoCell::new();
+pub static CONFIRM: RoCell<popup::Confirm> = RoCell::new();
 pub static SELECT: RoCell<popup::Select> = RoCell::new();
 pub static WHICH: RoCell<which::Which> = RoCell::new();
 
@@ -58,6 +59,7 @@ pub fn init() -> anyhow::Result<()> {
 	TASKS.with(Default::default);
 	THEME.with(Default::default);
 	INPUT.with(Default::default);
+	CONFIRM.with(Default::default);
 	SELECT.with(Default::default);
 	WHICH.with(Default::default);
 

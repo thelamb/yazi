@@ -10,6 +10,7 @@ pub struct Keymap {
 	pub tasks:      Vec<Control>,
 	pub select:     Vec<Control>,
 	pub input:      Vec<Control>,
+	pub confirm:    Vec<Control>,
 	pub help:       Vec<Control>,
 	pub completion: Vec<Control>,
 }
@@ -25,6 +26,7 @@ impl<'de> Deserialize<'de> for Keymap {
 			tasks:      Inner,
 			select:     Inner,
 			input:      Inner,
+			confirm:    Inner,
 			help:       Inner,
 			completion: Inner,
 		}
@@ -48,6 +50,8 @@ impl<'de> Deserialize<'de> for Keymap {
 		#[rustfmt::skip]
 		Preset::mix(&mut shadow.input.keymap, shadow.input.prepend_keymap, shadow.input.append_keymap);
 		#[rustfmt::skip]
+		Preset::mix(&mut shadow.confirm.keymap, shadow.confirm.prepend_keymap, shadow.confirm.append_keymap);
+		#[rustfmt::skip]
 		Preset::mix(&mut shadow.help.keymap, shadow.help.prepend_keymap, shadow.help.append_keymap);
 		#[rustfmt::skip]
 		Preset::mix(&mut shadow.completion.keymap, shadow.completion.prepend_keymap, shadow.completion.append_keymap);
@@ -57,6 +61,7 @@ impl<'de> Deserialize<'de> for Keymap {
 			tasks:      shadow.tasks.keymap,
 			select:     shadow.select.keymap,
 			input:      shadow.input.keymap,
+			confirm:    shadow.confirm.keymap,
 			help:       shadow.help.keymap,
 			completion: shadow.completion.keymap,
 		})
@@ -76,6 +81,7 @@ impl Keymap {
 			Layer::Tasks => &self.tasks,
 			Layer::Select => &self.select,
 			Layer::Input => &self.input,
+			Layer::Confirm => &self.confirm,
 			Layer::Help => &self.help,
 			Layer::Completion => &self.completion,
 			Layer::Which => unreachable!(),
