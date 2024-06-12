@@ -22,7 +22,7 @@ pub struct SelectCfg {
 #[derive(Default)]
 pub struct ConfirmCfg {
 	pub title:    String,
-	pub targets:  Vec<yazi_shared::fs::Url>,
+	pub message:  String,
 	pub position: Position,
 }
 
@@ -132,7 +132,7 @@ impl ConfirmCfg {
 		Self {
 			title:    CONFIRM.delete_title.replace("{n}", &targets.len().to_string()),
 			position: Position::new(CONFIRM.delete_origin, CONFIRM.delete_offset),
-			targets:  targets.to_vec(),
+			message:  targets.iter().map(|t| t.to_string()).collect::<Vec<_>>().join("\n"),
 		}
 	}
 
@@ -141,7 +141,7 @@ impl ConfirmCfg {
 		Self {
 			title:    CONFIRM.trash_title.replace("{n}", &targets.len().to_string()),
 			position: Position::new(CONFIRM.trash_origin, CONFIRM.trash_offset),
-			targets:  targets.to_vec(),
+			message:  targets.iter().map(|t| t.to_string()).collect::<Vec<_>>().join("\n"),
 		}
 	}
 }

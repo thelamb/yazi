@@ -1,4 +1,4 @@
-use ratatui::{buffer::Buffer, layout::Rect, text::{Line, Text}, widgets::{Block, BorderType, Paragraph, Widget}};
+use ratatui::{buffer::Buffer, layout::{Constraint, Layout, Rect}, text::{Line, Text}, widgets::{Block, BorderType, Paragraph, Widget}};
 use yazi_config::THEME;
 
 use crate::Ctx;
@@ -18,14 +18,21 @@ impl<'a> Widget for Confirm<'a> {
 
 		yazi_plugin::elements::Clear::default().render(area, buf);
 
-		let lines: Vec<_> = confirm.targets_list().iter().map(|t| Line::from(t.to_string())).collect();
-		Paragraph::new(Text::from(lines))
+		Paragraph::new(confirm.message().split('\n').map(Line::from).collect::<Vec<Line>>())
 			.block(
 				Block::bordered()
 					.border_type(BorderType::Rounded)
 					.border_style(THEME.input.border)
 					.title(Line::styled(&confirm.title(), THEME.input.title)),
 			)
-			.render(area, buf);
+			.render(chunks[0], buf);
+
+		let text = Text::from(vec![
+			Line::from("hello world 1"),
+			Line::from("hello world 2"),
+			Line::from("hello world 3"),
+		])
+		.centered();
+		Paragraph::new(text).block(Block::bordered()).render(chunks[1], buf);
 	}
 }

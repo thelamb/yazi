@@ -5,7 +5,7 @@ use yazi_config::popup::Position; //, INPUT};
 #[derive(Default)]
 pub struct Confirm {
 	pub(super) title:   String,
-	pub(super) targets: Vec<yazi_shared::fs::Url>,
+	pub(super) message: String,
 
 	pub position: Position,
 
@@ -16,9 +16,7 @@ pub struct Confirm {
 
 impl Confirm {
 	#[inline]
-	pub fn targets_list(&self) -> Vec<String> {
-		self.targets.iter().map(|url| url.to_string()).collect()
-	}
+	pub fn message(&self) -> String { self.message.clone() }
 
 	#[inline]
 	pub fn title(&self) -> String { self.title.clone() }

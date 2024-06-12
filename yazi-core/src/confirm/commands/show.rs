@@ -25,7 +25,7 @@ impl Confirm {
 
 		self.close(false);
 		self.title = opt.cfg.title;
-		self.targets = opt.cfg.targets;
+		self.message = opt.cfg.message;
 
 		self.position = opt.cfg.position;
 		self.callback = Some(opt.tx);

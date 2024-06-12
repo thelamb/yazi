@@ -38,7 +38,7 @@ impl<'a> Widget for Root<'a> {
 		}
 
 		if self.cx.confirm.visible {
-      confirm::Confirm::new(self.cx).render(area, buf);
+			confirm::Confirm::new(self.cx).render(area, buf);
 		}
 
 		if self.cx.help.visible {
