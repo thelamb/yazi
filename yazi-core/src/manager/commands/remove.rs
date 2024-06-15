@@ -27,7 +27,7 @@ impl Manager {
 		}
 
 		let mut opt = opt.into() as Opt;
-		opt.targets = self.selected_or_hovered(false).cloned().collect();
+		opt.targets = self.selected_or_hovered(true).cloned().collect();
 
 		if opt.force {
 			return self.remove_do(opt, tasks);
