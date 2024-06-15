@@ -25,7 +25,8 @@ impl Confirm {
 
 		self.close(false);
 		self.title = opt.cfg.title;
-		self.message = opt.cfg.message;
+		self.set_message(&opt.cfg.message);
+		self.vertical_scroll = 0;
 
 		self.position = opt.cfg.position;
 		self.callback = Some(opt.tx);

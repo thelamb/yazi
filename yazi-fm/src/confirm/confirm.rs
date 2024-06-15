@@ -1,7 +1,6 @@
-use ratatui::{buffer::Buffer, layout::{Constraint, Direction, Layout, Rect}, text::{Line, Text}, widgets::{Block, BorderType, Borders, Paragraph, Widget}};
+use ratatui::{buffer::Buffer, layout::{Constraint, Layout, Margin, Rect}, text::Line, widgets::{Block, BorderType, Paragraph, Scrollbar, ScrollbarOrientation, ScrollbarState, StatefulWidget, Widget}};
 use yazi_config::THEME;
 
-// use yazi_plugin::elements::Paragraph;
 use crate::Ctx;
 
 pub(crate) struct Confirm<'a> {
@@ -17,15 +16,6 @@ impl<'a> Widget for Confirm<'a> {
 		let area = self.cx.area(&confirm.position);
 
 		yazi_plugin::elements::Clear::default().render(area, buf);
-		let outer_layout = Layout::default()
-			.direction(Direction::Vertical)
-			.constraints(vec![Constraint::Percentage(70), Constraint::Percentage(30)])
-			.split(area);
-
-		let inner_layout = Layout::default()
-			.direction(Direction::Horizontal)
-			.constraints(vec![Constraint::Percentage(50), Constraint::Percentage(50)])
-			.split(outer_layout[1]);
 
 		Block::bordered()
 			.border_type(BorderType::Rounded)
@@ -33,10 +23,41 @@ impl<'a> Widget for Confirm<'a> {
 			.title(Line::styled(&confirm.title(), THEME.input.title))
 			.render(area, buf);
 
-		Paragraph::new(confirm.message().split('\n').map(Line::from).collect::<Vec<Line>>())
-			.render(outer_layout[0], buf);
+		let popup_layout =
+			Layout::vertical(vec![Constraint::Percentage(70), Constraint::Percentage(30)])
+				.vertical_margin(1)
+				.horizontal_margin(2)
+				.split(area);
 
-		Paragraph::new("[Y]es").block(Block::bordered()).render(inner_layout[0], buf);
-		Paragraph::new("(N)o").block(Block::bordered()).render(inner_layout[1], buf);
+		let button_layout = Layout::horizontal(vec![
+			Constraint::Percentage(10),
+			Constraint::Percentage(30),
+			Constraint::Percentage(20),
+			Constraint::Percentage(30),
+			Constraint::Percentage(10),
+		])
+		.vertical_margin(1)
+		.split(popup_layout[1]);
+
+		Paragraph::new(confirm.message().split('\n').map(Line::from).collect::<Vec<Line>>())
+			.block(Block::bordered().border_type(BorderType::Rounded).border_style(THEME.input.border))
+			.scroll((confirm.vertical_scroll as u16, 0))
+			.render(popup_layout[0], buf);
+
+		let mut scrollbar_state =
+			ScrollbarState::new(confirm.message().split('\n').collect::<Vec<&str>>().len())
+				.position(confirm.vertical_scroll);
+
+		Scrollbar::new(ScrollbarOrientation::VerticalRight)
+			.begin_symbol(Some("↑"))
+			.end_symbol(Some("↓"))
+			.render(
+				popup_layout[0].inner(&Margin { vertical: 1, horizontal: 0 }),
+				buf,
+				&mut scrollbar_state,
+			);
+
+		Paragraph::new("[Y]es").block(Block::bordered()).centered().render(button_layout[1], buf);
+		Paragraph::new("(N)o").block(Block::bordered()).centered().render(button_layout[3], buf);
 	}
 }

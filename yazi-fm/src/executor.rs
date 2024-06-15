@@ -259,6 +259,7 @@ impl<'a> Executor<'a> {
 			};
 		}
 
+		on!(arrow);
 		on!(show);
 		on!(close);
 	}
