@@ -1,4 +1,4 @@
-use ratatui::{buffer::Buffer, layout::{Constraint, Layout, Margin, Rect}, text::Line, widgets::{Block, BorderType, Paragraph, Scrollbar, ScrollbarOrientation, ScrollbarState, StatefulWidget, Widget}};
+use ratatui::{buffer::Buffer, layout::{Constraint, Layout, Margin, Rect}, text::Line, widgets::{Block, BorderType, Paragraph, Scrollbar, ScrollbarOrientation, ScrollbarState, StatefulWidget, Widget, Wrap}};
 use yazi_config::THEME;
 
 use crate::Ctx;
@@ -42,20 +42,21 @@ impl<'a> Widget for Confirm<'a> {
 		Paragraph::new(confirm.message().split('\n').map(Line::from).collect::<Vec<Line>>())
 			.block(Block::bordered().border_type(BorderType::Rounded).border_style(THEME.input.border))
 			.scroll((confirm.vertical_scroll as u16, 0))
+			.wrap(Wrap { trim: false })
 			.render(popup_layout[0], buf);
 
-		let mut scrollbar_state =
-			ScrollbarState::new(confirm.message().split('\n').collect::<Vec<&str>>().len())
-				.position(confirm.vertical_scroll);
+		const BORDER_SIZE: usize = 2;
+		if confirm.message_num_lines() > popup_layout[0].as_size().height as usize - BORDER_SIZE {
+			let mut scrollbar_state =
+				ScrollbarState::new(confirm.message().split('\n').collect::<Vec<&str>>().len())
+					.position(confirm.vertical_scroll);
 
-		Scrollbar::new(ScrollbarOrientation::VerticalRight)
-			.begin_symbol(Some("↑"))
-			.end_symbol(Some("↓"))
-			.render(
+			Scrollbar::new(ScrollbarOrientation::VerticalRight).render(
 				popup_layout[0].inner(&Margin { vertical: 1, horizontal: 0 }),
 				buf,
 				&mut scrollbar_state,
 			);
+		}
 
 		Paragraph::new("[Y]es").block(Block::bordered()).centered().render(button_layout[1], buf);
 		Paragraph::new("(N)o").block(Block::bordered()).centered().render(button_layout[3], buf);

@@ -95,7 +95,11 @@ impl Utils {
 					position: Position::try_from(t.raw_get::<_, Table>("position")?)?.into(),
 				});
 
-				return result.await.expect("BLAAA").into_lua_multi(lua);
+				if let Ok(_answer) = result.await {
+					true.into_lua_multi(lua)
+				} else {
+					false.into_lua_multi(lua)
+				}
 			})?,
 		)?;
 
